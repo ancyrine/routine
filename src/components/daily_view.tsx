@@ -34,7 +34,14 @@ function timeToMinutes(time: string) {
   return h * 60 + m;
 }
 
-const Daily: React.FC = () => {
+type Event = {
+  title: string;
+  start: string;
+  end: string;
+  color: string;
+};
+
+const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
   return (
     <div
       style={{
