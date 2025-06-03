@@ -7,24 +7,13 @@ import {
   levelOptions,
   Level,
   Task,
+  getDurationString,
 } from "../types";
 
 const defaultColor = "#c7d2fe";
 
-function getDurationString(start: string, end: string): string {
-  const [sh, sm] = start.split(":").map(Number);
-  const [eh, em] = end.split(":").map(Number);
-  let minutes = eh * 60 + em - (sh * 60 + sm);
-  if (minutes < 0) minutes += 24 * 60; // 자정 넘는 경우
-  const h = Math.floor(minutes / 60);
-  const m = minutes % 60;
-  const hh = h.toString().padStart(2, "0");
-  const mm = m.toString().padStart(2, "0");
-  return `${hh}:${mm}`;
-}
-
 const AddTask: React.FC<{
-  tasks: Task[];
+  tasks: Task[]; //Todo : do i need list of tasks?
   editingtasks: Task[];
   onAdd: (task: Task) => void;
   onSave: (newProject: any) => void;

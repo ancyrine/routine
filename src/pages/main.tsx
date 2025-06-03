@@ -47,6 +47,7 @@ const MainPage: React.FC = () => {
       {edittask && (
         <EditTask
           task={edittask}
+          onAdd={handleAddTask}
           onSave={handleSaveTask}
           onClose={() => setEditTask(null)}
         />

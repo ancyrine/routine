@@ -22,6 +22,18 @@ export type CalendarDayProps = {
   progress?: number[];
 };
 
+export function getDurationString(start: string, end: string): string {
+  const [sh, sm] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+  let minutes = eh * 60 + em - (sh * 60 + sm);
+  if (minutes < 0) minutes += 24 * 60; // 자정 넘는 경우
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  const hh = h.toString().padStart(2, "0");
+  const mm = m.toString().padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
 // Reference
 export const initialTasks: Task[] = [
   {
