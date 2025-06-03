@@ -3,13 +3,8 @@ import Calendar from "../components/calendar";
 import Daily from "../components/daily_view";
 import AddTask from "../components/add_task";
 import Projects from "../components/projects";
-
-type Event = {
-  title: string;
-  start: string;
-  end: string;
-  color: string;
-};
+import EditProjectModal from "../components/edit_project";
+import { Event } from "../types";
 
 const initialEvents: Event[] = [
   {
@@ -26,8 +21,12 @@ const initialEvents: Event[] = [
   },
 ];
 
+const initialProjects: string[] = ["Personal", "Work", "Home"];
+
 const CalendarPage: React.FC = () => {
   const [events, setEvents] = useState<Event[]>(initialEvents);
+  const [projects, setProjects] = useState<string[]>(initialProjects);
+  const [editingprojects, setEditingProject] = useState<string | null>(null);
 
   const handleAddTask = (task: Event) => {
     setEvents([...events, task]);
@@ -37,18 +36,47 @@ const CalendarPage: React.FC = () => {
     <div
       style={{
         display: "flex",
-        flexDirection: "column",
-        gap: 16,
-        alignItems: "center",
+        flexDirection: "row",
+        gap: 24,
+        justifyContent: "center",
+        alignItems: "flex-start",
         background: "#f6f6f6",
         minHeight: "100vh",
-        padding: 16,
+        padding: 24,
       }}
     >
       <Calendar />
       <Daily events={events} />
-      <AddTask onAdd={handleAddTask} />
-      <Projects />
+      <AddTask
+        onAdd={handleAddTask}
+        projects={projects}
+        onSave={function (newProject: any): void {
+          throw new Error("Function not implemented.");
+        }}
+        setProjects={function (value: React.SetStateAction<any[]>): void {
+          throw new Error("Function not implemented.");
+        }}
+        setEvents={function (value: React.SetStateAction<any[]>): void {
+          throw new Error("Function not implemented.");
+        }}
+        editingprojects={[]}
+        setEditingProject={function (value: React.SetStateAction<any[]>): void {
+          throw new Error("Function not implemented.");
+        }}
+      />
+      <Projects projects={projects} onEdit={setEditingProject} />
+      {editingprojects && (
+        <EditProjectModal
+          projectName={editingprojects}
+          onSave={(newName) => {
+            setProjects(
+              projects.map((p) => (p === editingprojects ? newName : p))
+            );
+            setEditingProject(null);
+          }}
+          onClose={() => setEditingProject(null)}
+        />
+      )}
     </div>
   );
 };

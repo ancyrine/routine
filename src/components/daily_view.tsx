@@ -1,30 +1,5 @@
 import React from "react";
-
-// 예시 일정 데이터
-const events = [
-  {
-    start: "07:00",
-    end: "08:30",
-    title: "🌅 Morning Routine",
-    color: "#f5e6c8",
-  },
-  { start: "09:00", end: "16:00", title: "💻 Work", color: "#dbeafe" },
-  {
-    start: "10:00",
-    end: "11:00",
-    title: "Brainstorm December",
-    color: "#c7d2fe",
-  },
-  {
-    start: "11:00",
-    end: "12:00",
-    title: "Film + Post Gift Tracking",
-    color: "#c7d2fe",
-  },
-  { start: "12:00", end: "13:00", title: "Lunch Break", color: "#fef9c3" },
-  { start: "13:00", end: "14:30", title: "Plan Gcal Video", color: "#c7d2fe" },
-  { start: "16:00", end: "16:30", title: "Shutdown Routine", color: "#f5e6c8" },
-];
+import { Event } from "../types";
 
 const hours = Array.from({ length: 15 }, (_, i) => 7 + i); // 7~21시
 
@@ -33,13 +8,6 @@ function timeToMinutes(time: string) {
   const [h, m] = time.split(":").map(Number);
   return h * 60 + m;
 }
-
-type Event = {
-  title: string;
-  start: string;
-  end: string;
-  color: string;
-};
 
 const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
   return (

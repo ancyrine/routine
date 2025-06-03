@@ -1,4 +1,5 @@
 import React from "react";
+import { CalendarDayProps } from "../types";
 
 const weekdays = ["A", "B", "T", "W", "T", "F", "S"]; // 요일 라벨
 
@@ -31,11 +32,6 @@ const CalendarHeader = () => (
 );
 
 const ringColors = ["#ef4444", "#facc15", "#3b82f6"]; // health, work, life
-
-type CalendarDayProps = {
-  day: number | null;
-  progress?: number[];
-};
 
 const CalendarDay: React.FC<CalendarDayProps> = ({ day, progress }) => {
   if (day === null) return <div style={{ width: 40, height: 40 }} />; // 빈 칸

@@ -1,24 +1,56 @@
 import React, { useState } from "react";
-
-type TaskInput = {
-  title: string;
-  start: string;
-  end: string;
-  color: string;
-};
+import {
+  categoryOptions,
+  Category,
+  repeatOptions,
+  Repeat,
+  Task,
+} from "../types";
 
 const defaultColor = "#c7d2fe";
 
-const AddTask: React.FC<{ onAdd: (task: TaskInput) => void }> = ({ onAdd }) => {
+function getDurationString(start: string, end: string): string {
+  const [sh, sm] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+  let minutes = eh * 60 + em - (sh * 60 + sm);
+  if (minutes < 0) minutes += 24 * 60; // 자정 넘는 경우
+  const h = Math.floor(minutes / 60);
+  const m = minutes % 60;
+  const hh = h.toString().padStart(2, "0");
+  const mm = m.toString().padStart(2, "0");
+  return `${hh}:${mm}`;
+}
+
+const AddTask: React.FC<{
+  projects: string[];
+  onAdd: (task: Task) => void;
+  onSave: (newProject: any) => void;
+  setProjects: React.Dispatch<React.SetStateAction<any[]>>;
+  setEvents: React.Dispatch<React.SetStateAction<any[]>>;
+  editingprojects: string[];
+  setEditingProject: React.Dispatch<React.SetStateAction<any[]>>;
+}> = ({
+  projects,
+  onAdd,
+  onSave,
+  setProjects,
+  setEvents,
+  editingprojects,
+  setEditingProject,
+}) => {
   const [title, setTitle] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
   const [color, setColor] = useState(defaultColor);
+  const [category, setCategory] = useState<Category>("Other");
+  const [repeat, setRepeat] = useState<Repeat>("none");
+
+  const duration = getDurationString(start, end);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!title) return;
-    onAdd({ title, start, end, color });
+    onAdd({ title, start, end, duration, color, category, repeat });
     setTitle("");
     setStart("09:00");
     setEnd("10:00");
@@ -55,7 +87,7 @@ const AddTask: React.FC<{ onAdd: (task: TaskInput) => void }> = ({ onAdd }) => {
           value={start}
           onChange={(e) => setStart(e.target.value)}
           style={{
-            flex: 1,
+            flex: 2,
             padding: 6,
             borderRadius: 6,
             border: "1px solid #eee",
@@ -67,12 +99,25 @@ const AddTask: React.FC<{ onAdd: (task: TaskInput) => void }> = ({ onAdd }) => {
           value={end}
           onChange={(e) => setEnd(e.target.value)}
           style={{
-            flex: 1,
+            flex: 2,
             padding: 6,
             borderRadius: 6,
             border: "1px solid #eee",
           }}
           required
+        />
+        <input
+          type="text"
+          value={duration}
+          style={{
+            flex: 1,
+            padding: 6,
+            borderRadius: 6,
+            border: "1px solid #eee",
+            width: 0, // 추가!
+            minWidth: 0, // 추가!
+          }}
+          tabIndex={-1}
         />
       </div>
       <input
@@ -81,6 +126,26 @@ const AddTask: React.FC<{ onAdd: (task: TaskInput) => void }> = ({ onAdd }) => {
         onChange={(e) => setColor(e.target.value)}
         style={{ width: 40, height: 32, border: "none", background: "none" }}
       />
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value as Category)}
+      >
+        {categoryOptions.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+      <select
+        value={repeat}
+        onChange={(e) => setRepeat(e.target.value as Repeat)}
+      >
+        {repeatOptions.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
       <button
         type="submit"
         style={{
