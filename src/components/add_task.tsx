@@ -4,6 +4,8 @@ import {
   Category,
   repeatOptions,
   Repeat,
+  levelOptions,
+  Level,
   Task,
 } from "../types";
 
@@ -22,39 +24,33 @@ function getDurationString(start: string, end: string): string {
 }
 
 const AddTask: React.FC<{
-  projects: string[];
+  tasks: Task[];
+  editingtasks: Task[];
   onAdd: (task: Task) => void;
   onSave: (newProject: any) => void;
-  setProjects: React.Dispatch<React.SetStateAction<any[]>>;
-  setEvents: React.Dispatch<React.SetStateAction<any[]>>;
-  editingprojects: string[];
-  setEditingProject: React.Dispatch<React.SetStateAction<any[]>>;
-}> = ({
-  projects,
-  onAdd,
-  onSave,
-  setProjects,
-  setEvents,
-  editingprojects,
-  setEditingProject,
-}) => {
-  const [title, setTitle] = useState("");
+  // setProjects: React.Dispatch<React.SetStateAction<any[]>>;
+  // setTasks: React.Dispatch<React.SetStateAction<any[]>>;
+}> = ({ tasks, editingtasks, onAdd, onSave }) => {
+  const [name, setName] = useState("");
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
   const [color, setColor] = useState(defaultColor);
   const [category, setCategory] = useState<Category>("Other");
   const [repeat, setRepeat] = useState<Repeat>("none");
+  const [level, setlevel] = useState<Level>("1");
+  const [parent_name, setParentName] = useState(""); // todo: auto fill
 
   const duration = getDurationString(start, end);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title) return;
-    onAdd({ title, start, end, duration, color, category, repeat });
-    setTitle("");
+    if (!name) return;
+    onAdd({ name, start, end, color, category, repeat, level, parent_name });
+    setName("");
     setStart("09:00");
     setEnd("10:00");
     setColor(defaultColor);
+    setParentName("");
   };
 
   return (
@@ -76,8 +72,8 @@ const AddTask: React.FC<{
       <input
         type="text"
         placeholder="Task name"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        value={name}
+        onChange={(e) => setName(e.target.value)}
         style={{ padding: 8, borderRadius: 6, border: "1px solid #eee" }}
         required
       />
@@ -146,6 +142,20 @@ const AddTask: React.FC<{
           </option>
         ))}
       </select>
+      <select value={level} onChange={(e) => setlevel(e.target.value as Level)}>
+        {levelOptions.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
+      <input
+        type="text"
+        placeholder="Parent name"
+        value={parent_name}
+        onChange={(e) => setParentName(e.target.value)}
+        style={{ padding: 8, borderRadius: 6, border: "1px solid #eee" }}
+      />
       <button
         type="submit"
         style={{

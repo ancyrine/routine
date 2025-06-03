@@ -1,5 +1,5 @@
 import React from "react";
-import { Event } from "../types";
+import { Task } from "../types";
 
 const hours = Array.from({ length: 15 }, (_, i) => 7 + i); // 7~21시
 
@@ -9,7 +9,7 @@ function timeToMinutes(time: string) {
   return h * 60 + m;
 }
 
-const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
+const Daily: React.FC<{ tasks: Task[] }> = ({ tasks }) => {
   return (
     <div
       style={{
@@ -66,9 +66,9 @@ const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
             />
           ))}
           {/* 이벤트 블록 */}
-          {events.map((ev, idx) => {
-            const startMin = timeToMinutes(ev.start);
-            const endMin = timeToMinutes(ev.end);
+          {tasks.map((ts, idx) => {
+            const startMin = timeToMinutes(ts.start);
+            const endMin = timeToMinutes(ts.end);
             const dayStart = 7 * 60;
             const top = ((startMin - dayStart) / 60) * 40;
             const height = ((endMin - startMin) / 60) * 40;
@@ -81,7 +81,7 @@ const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
                   right: 8,
                   top,
                   height,
-                  background: ev.color,
+                  background: ts.color,
                   borderRadius: 8,
                   boxShadow: "0 1px 4px #0001",
                   padding: "4px 8px",
@@ -94,11 +94,11 @@ const Daily: React.FC<{ events: Event[] }> = ({ events }) => {
                   alignItems: "center",
                 }}
               >
-                {ev.title}
+                {ts.name}
                 <span
                   style={{ marginLeft: "auto", fontSize: 12, color: "#888" }}
                 >
-                  {ev.start} - {ev.end}
+                  {ts.start} - {ts.end}
                 </span>
               </div>
             );

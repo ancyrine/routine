@@ -1,10 +1,10 @@
 import React from "react";
-import CalendarPage from "./pages/calendar";
+import MainPage from "./pages/main";
 
 function App() {
   return (
     <div className="App">
-      <CalendarPage />
+      <MainPage />
     </div>
   );
 }
