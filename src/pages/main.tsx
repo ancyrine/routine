@@ -15,7 +15,7 @@ const MainPage: React.FC = () => {
 
   // task(project/task) 수정
   const handleSaveTask = (updated: Task) => {
-    setTasks(tasks.map((t) => (t.name === updated.name ? updated : t)));
+    setTasks(tasks.map((t) => (t.id === updated.id ? updated : t)));
     setEditTask(null);
   };
 
@@ -49,6 +49,7 @@ const MainPage: React.FC = () => {
           task={edittask}
           onAdd={handleAddTask}
           onSave={handleSaveTask}
+          onDelete={handleAddTask}
           onClose={() => setEditTask(null)}
         />
       )}
